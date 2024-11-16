@@ -10,8 +10,8 @@ export const TelegramUserProfile = () => {
   if (!userData) {
     return (
       <div>
-        Loading... Be sure to open the app inside telegram. <br /> If it takes time try:{' '}
-        <a href="https://t.me/SafePower2Bot/app">t.me/SafePower2Bot/app</a>{' '}
+        For the best experience open inside Telegram. <br />
+        Just go to: <a href="https://t.me/SafePower2Bot/app">t.me/SafePower2Bot/app</a>.
       </div>
     );
   }

@@ -1,119 +1,137 @@
 import axios from "axios";
-import { useEffect, useState } from "react";
-import { v4 as uuidv4 } from "uuid";
+import { useEffect, useRef, useState } from "react";
+import PropTypes from "prop-types";
+import { getAppId } from "../utils/helpers";
+import CustomPopup from "./customPopup/CustomPopup";
+import { generateUserSeed } from "./auth/Auth";
 
 const API_BASE = "https://nillion-storage-apis-v0.onrender.com";
-export default function ChooseFile() {
-    const [appId, setAppId] = useState(null);
-    const [userSeed, setUserSeed] = useState(null);
-    const [isLoading, setIsLoading] = useState(false);
+export default function ChooseFile({ account }) {
+  const [appId, setAppId] = useState(null);
+  const [userSeed, setUserSeed] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const [isShowPopup, setIsShowPopup] = useState(false);
+  const [addressForShare, setAddressForShare] = useState(false);
+  const [file, setFile] = useState();
+  const fileInputRef = useRef(null);
 
-    useEffect(() => {
-        const storedAppId = localStorage.getItem("app_id");
-        const storedUserSeed = localStorage.getItem("user_seed");
-        if (storedAppId && storedUserSeed) {
-          setAppId(storedAppId);
-          setUserSeed(storedUserSeed);
-        }
-      }, []);
-    
-      const handleLogin = async () => {
-        setIsLoading(true);
-        const newUserSeed = uuidv4();
-        try {
-          const userResponse = await axios.post(`${API_BASE}/api/user`, {
-            nillion_seed: newUserSeed,
-          });
-          const nillionUserId = userResponse.data.nillion_user_id;
-    
-          const appResponse = await fetch(`${API_BASE}/api/apps/register`, {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
+  useEffect(() => {
+    async function init() {
+      setIsLoading(true);
+
+    try {
+      const appId = await getAppId();
+      setAppId(appId);
+      const generatedUserSeed = await generateUserSeed();
+      console.log("Generated user seed:", generatedUserSeed);
+      setUserSeed(generatedUserSeed);
+    } catch (error) {
+      console.error("Login failed:", error);
+    }
+    setIsLoading(false);
+  }
+  init();
+  }, [account]);
+
+  const handleFileUpload = async (event) => {
+    const file = event.target.files[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = async (e) => {
+      const blob = new Blob([e.target.result], { type: file.type });
+      try {
+        const response = await axios.post(
+          `${API_BASE}/api/apps/${appId}/secrets`,
+          {
+            secret: {
+              nillion_seed: userSeed,
+              secret_value: await blobToBase64(blob),
+              secret_name: file.name,
             },
-            body: JSON.stringify({ nillion_user_id: nillionUserId }),
-          });
-    
-          if (!appResponse.ok) {
-            throw new Error("Failed to register app");
+            permissions: {
+              retrieve: [],
+              update: [],
+              delete: [],
+              compute: {},
+            },
           }
-    
-          const appData = await appResponse.json();
-          const newAppId = appData.app_id;
-    
-          setAppId(newAppId);
-          setUserSeed(newUserSeed);
-          localStorage.setItem("app_id", newAppId);
-          localStorage.setItem("user_seed", newUserSeed);
-        } catch (error) {
-          console.error("Login failed:", error);
-        }
-        setIsLoading(false);
-      };
-    
-      const handleFileUpload = async (event) => {
-        const file = event.target.files[0];
-        if (!file) return;
-    
-        const reader = new FileReader();
-        reader.onload = async (e) => {
-          const blob = new Blob([e.target.result], { type: file.type });
-          try {
-            const response = await axios.post(
-              `${API_BASE}/api/apps/${appId}/secrets`,
-              {
-                secret: {
-                  nillion_seed: userSeed,
-                  secret_value: await blobToBase64(blob),
-                  secret_name: file.name,
-                },
-                permissions: {
-                  retrieve: [],
-                  update: [],
-                  delete: [],
-                  compute: {},
-                },
-              }
-            );
-            console.log("File uploaded:", response.data);
-          } catch (error) {
-            console.error("File upload failed:", error);
-          }
-        };
-        reader.readAsArrayBuffer(file);
-      };
-    
-      const blobToBase64 = (blob) => {
-        return new Promise((resolve, reject) => {
-          const reader = new FileReader();
-          reader.onloadend = () => resolve(reader.result.split(",")[1]);
-          reader.onerror = reject;
-          reader.readAsDataURL(blob);
-        });
-      };
-    
+        );
+        console.log("File uploaded:", response.data);
+      } catch (error) {
+        console.error("File upload failed:", error);
+      }
+    };
+    reader.readAsArrayBuffer(file);
+  };
+
+  const blobToBase64 = (blob) => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onloadend = () => resolve(reader.result.split(",")[1]);
+      reader.onerror = reject;
+      reader.readAsDataURL(blob);
+    });
+  };
+
+  const handlePopup = (event) => {
+    setIsShowPopup(true);
+    const file = event.target.files[0];
+    if (!file) return;
+    setFile(event);
+  };
 
   return (
-    <div className="login-container">
-    {!appId ? (
-      <button
-        onClick={handleLogin}
-        disabled={isLoading}
-        className="login-button"
-      >
-        {isLoading ? "Logging in..." : "Login"}
-      </button>
-    ) : (
-      <div className="user-info">
-        <p>App ID: {appId}</p>
-        <p>User Seed: {userSeed}</p>
+    <div>
+      <CustomPopup open={isShowPopup} closed={setIsShowPopup}>
+        <div className="popup-container">
+          <button className="btn-popup" onClick={() => handleFileUpload(file)}>
+            Upload
+          </button>
+          {/* <div>
+            <input
+              type="checkbox"
+              name="isCorrect"
+              checked={isShowFiledAddress}
+              onChange={(e) => setIsShowFieldAddress(e.target.checked)}
+            />
+            <label>Share With</label>
+          </div> */}
+        </div>
+        <div>Share With (Optional)</div>
         <input
-          type="file"
-          onChange={handleFileUpload}
-          className="file-input"
+          type="text"
+          id="address"
+          placeholder="Telegram, Wallet Address, Nillion User Id"
+          onChange={(e) => setAddressForShare(e.target.value)}
         />
-      </div>
-    )}
-  </div>
-  )
+      </CustomPopup>
+      {!appId ? (
+        <>
+          {isLoading ? "Loading..." : "Fetching App Id..."}
+          </>
+      ) : (
+        <div>
+          <input
+            ref={fileInputRef}
+            type="file"
+            onChange={handlePopup}
+            className="file-input"
+            style={{ display: "none" }}
+          />
+          <button
+            style={{ marginLeft: "70px" }}
+            className="btn-login"
+            onClick={() => fileInputRef.current.click()}
+          >
+            Choose File
+          </button>
+        </div>
+      )}
+    </div>
+  );
 }
+
+ChooseFile.propTypes = {
+  account: PropTypes.string,
+};
