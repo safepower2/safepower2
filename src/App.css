@@ -1,0 +1,53 @@
+/* LoginComponent.css */
+.login-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+.login-button {
+  background-color: #4caf50;
+  border: none;
+  color: white;
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 2px;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.login-button:disabled {
+  background-color: #cccccc;
+  cursor: not-allowed;
+}
+
+.user-info {
+  text-align: center;
+  word-break: break-all;
+}
+
+.file-input {
+  margin-top: 20px;
+}
+
+/* Responsive styles */
+@media screen and (max-width: 600px) {
+  .login-container {
+    padding: 10px;
+  }
+
+  .login-button {
+    padding: 10px 20px;
+    font-size: 14px;
+  }
+
+  .user-info p {
+    font-size: 12px;
+  }
+}
