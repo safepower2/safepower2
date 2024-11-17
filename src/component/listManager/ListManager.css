@@ -1,40 +1,75 @@
-.list-container {
+
+.listmanager-tab-container {
   width: 90%;
-  margin: 50px;
-  color: antiquewhite;
+  margin: 50px auto;
+  color: #333;
+  font-family: Arial, sans-serif;
 }
 
-.list-item {
-  background-color: #505051;
+
+.listmanager-tab-headers {
+  display: flex;
+  border-bottom: 1px solid #ccc;
   margin-bottom: 20px;
-  padding: 20px;
-  border-radius: 10px;
+}
+
+.listmanager-tab {
+  flex: 1;
+  padding: 15px;
+  text-align: center;
+  cursor: pointer;
+  background-color: #1f97d5;
+  box-shadow: 0px 0px 10px white;
+  outline: none;
+  font-size: 16px;
+  transition: background-color 0.3s;
+
+}
+
+.listmanager-tab:hover {
+  background-color: #e0e0e0;
+  color: #1f97d5;
+}
+
+.listmanager-active {
+  background-color: #005ed8;
+  border-bottom: 2px solid #4285f4;
+  font-weight: bold;
+  box-shadow: none;
+}
+
+.listmanager-list-item {
+  background-color: #fafafa;
+  margin-bottom: 15px;
+  padding: 15px;
+  border-radius: 5px;
   display: flex;
   justify-content: space-between;
+  align-items: center;
 }
 
-.list-container img {
-  position: relative;
-  top: 3px;
-  margin-left: 15px;
+.listmanager-list-item div {
+  display: flex;
+  align-items: center;
+}
+
+.listmanager-list-item img {
+  margin-left: 10px;
   cursor: pointer;
 }
 
-#address {
-  width: 100%;
-  margin-bottom: 15px;
-  background: transparent;
-  outline: none;
-  height: 150px;
-  border: 2px solid rgba(255, 255, 255, 0.15);
-  box-sizing: border-box;
-  font-family: "Inter";
-  font-style: normal;
-  font-weight: 500;
-  font-size: 16px;
-  line-height: 45px;
-  color: rgba(255, 255, 255, 0.5);
-  padding: 0px 21px;
-  height: 50px;
-  border-radius: 10px;
+.listmanager-no-files {
+  text-align: center;
+  color: #2d2d2d;
+  margin-top: 20px;
 }
+
+.listmanager-tab + .listmanager-tab {
+  border-left: 1px solid #ccc;
+}
+
+h2 {
+  margin-bottom: 20px;
+  color: #fafafa;
+}
+

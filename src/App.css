@@ -9,7 +9,7 @@
 }
 
 .login-button {
-  background-color: #4caf50;
+  background-color: #1f97d5;
   border: none;
   color: white;
   padding: 15px 32px;
@@ -23,7 +23,7 @@
 }
 
 .login-button:disabled {
-  background-color: #cccccc;
+  background-color: #979797;
   cursor: not-allowed;
 }
 

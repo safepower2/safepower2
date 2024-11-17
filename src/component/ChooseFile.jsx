@@ -19,18 +19,18 @@ export default function ChooseFile({ account }) {
     async function init() {
       setIsLoading(true);
 
-    try {
-      const appId = await getAppId();
-      setAppId(appId);
-      const generatedUserSeed = await generateUserSeed();
-      console.log("Generated user seed:", generatedUserSeed);
-      setUserSeed(generatedUserSeed);
-    } catch (error) {
-      console.error("Login failed:", error);
+      try {
+        const appId = await getAppId();
+        setAppId(appId);
+        const generatedUserSeed = await generateUserSeed();
+        console.log("Generated user seed:", generatedUserSeed);
+        setUserSeed(generatedUserSeed);
+      } catch (error) {
+        console.error("Login failed:", error);
+      }
+      setIsLoading(false);
     }
-    setIsLoading(false);
-  }
-  init();
+    init();
   }, [account]);
 
   const handleFileUpload = async (event) => {
@@ -107,9 +107,7 @@ export default function ChooseFile({ account }) {
         />
       </CustomPopup>
       {!appId ? (
-        <>
-          {isLoading ? "Loading..." : "Fetching App Id..."}
-          </>
+        <>{isLoading ? "Loading..." : "Fetching App Id..."}</>
       ) : (
         <div>
           <input
@@ -120,7 +118,7 @@ export default function ChooseFile({ account }) {
             style={{ display: "none" }}
           />
           <button
-            style={{ marginLeft: "70px" }}
+            style={{ }}
             className="btn-login"
             onClick={() => fileInputRef.current.click()}
           >

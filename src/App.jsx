@@ -31,12 +31,6 @@ const App = () => {
       <div className="container">
         <Auth loggedIn={loggedIn} setLoggedIn={setLoggedIn} />
         {loggedIn && <ListManager data={myFilesData} title={"My Files"} />}
-        {loggedIn && (
-          <ListManager
-            data={filesSharedWithMe}
-            title={"Files Shared With Me"}
-          />
-        )}
       </div>
     </TelegramMiniAppProvider>
   );

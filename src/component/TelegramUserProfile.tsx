@@ -1,32 +1,33 @@
 import React from 'react';
 import { useTelegramMiniApp } from '../TelegramMiniAppContext';
+import './TelegramUserProfile.css';
 
 export const TelegramUserProfile = () => {
-  // First, ensure the Telegram Web App is initialized
+  // Initialize Telegram Web App
   (window as any).Telegram.WebApp.ready();
 
   const userData = useTelegramMiniApp();
 
   if (!userData) {
     return (
-      <div>
-        For the best experience open inside Telegram. <br />
-        Just go to: <a href="https://t.me/SafePower2Bot/app">t.me/SafePower2Bot/app</a>.
+      <div className="notification">
+        <p>
+          For the best experience, open inside Telegram.
+          <br />
+          Just go to: <a href="https://t.me/SafePower2Bot/app">t.me/SafePower2Bot/app</a>.
+        </p>
       </div>
     );
   }
 
   return (
-    <div>
-      <h3>Telegram Profile</h3>
+    <div className="notification">
+      <h3>Welcome, {userData.first_name}!</h3>
       <p>
-        Username: <strong>{userData.username}</strong>
+        <strong>Username:</strong> {userData.username || 'N/A'}
       </p>
       <p>
-        Full Name:{' '}
-        <strong>
-          {userData.first_name} {userData.last_name}
-        </strong>
+        <strong>Full Name:</strong> {userData.first_name} {userData.last_name}
       </p>
     </div>
   );
