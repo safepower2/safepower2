@@ -6,7 +6,7 @@ import CustomPopup from "./customPopup/CustomPopup";
 import { generateUserSeed } from "./auth/Auth";
 
 const API_BASE = "https://nillion-storage-apis-v0.onrender.com";
-export default function ChooseFile({ account }) {
+export default function ChooseFile({ account, myFiles, setMyFilesData, sharedFiles, setFilesSharedWithMe }) {
   const [appId, setAppId] = useState(null);
   const [userSeed, setUserSeed] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -14,6 +14,7 @@ export default function ChooseFile({ account }) {
   const [addressForShare, setAddressForShare] = useState(false);
   const [file, setFile] = useState();
   const fileInputRef = useRef(null);
+  const [uploadButtonText, setUploadButtonText] = useState("Upload");
 
   useEffect(() => {
     async function init() {
@@ -34,7 +35,9 @@ export default function ChooseFile({ account }) {
   }, [account]);
 
   const handleFileUpload = async (event) => {
+    setUploadButtonText("Uploading...");
     const file = event.target.files[0];
+    console.log("File selected:", file);
     if (!file) return;
 
     const reader = new FileReader();
@@ -58,10 +61,21 @@ export default function ChooseFile({ account }) {
           }
         );
         console.log("File uploaded:", response.data);
+        if(!addressForShare || addressForShare.trim() === "" ) {
+          setMyFilesData([{name: file.name}, ...myFiles]);
+        } else {
+          setFilesSharedWithMe([{name: file.name}, ...sharedFiles]);
+        }
+        setIsShowPopup(false);
+        
       } catch (error) {
         console.error("File upload failed:", error);
+        alert("File upload failed: " + error.message);
       }
+
+      setUploadButtonText("Upload");
     };
+
     reader.readAsArrayBuffer(file);
   };
 
@@ -86,7 +100,7 @@ export default function ChooseFile({ account }) {
       <CustomPopup open={isShowPopup} closed={setIsShowPopup}>
         <div className="popup-container">
           <button className="btn-popup" onClick={() => handleFileUpload(file)}>
-            Upload
+            {uploadButtonText}
           </button>
           {/* <div>
             <input

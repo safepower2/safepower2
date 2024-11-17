@@ -12,16 +12,16 @@ const App = () => {
 
   useEffect(() => {
     setMyFilesData([
-      { name: "top secret file" },
-      { name: "another file" },
-      { name: "some confidential file" },
+      { name: "top secret file - demo" },
+      { name: "another file - demo" },
+      { name: "some confidential file - demo" },
     ]);
   }, []);
 
   useEffect(() => {
     setFilesSharedWithMe([
-      { name: "shared business stuff" },
-      { name: "among the family stuff" },
+      { name: "shared business stuff - demo" },
+      { name: "among the family stuff - demo" },
     ]);
   }, []);
 
@@ -29,7 +29,9 @@ const App = () => {
     <TelegramMiniAppProvider>
       <TelegramUserProfile />
       <div className="container">
-        <Auth loggedIn={loggedIn} setLoggedIn={setLoggedIn} />
+        <Auth loggedIn={loggedIn} setLoggedIn={setLoggedIn} 
+          myFiles={myFiles} setMyFilesData= {setMyFilesData}
+          sharedFiles={sharedFiles} setFilesSharedWithMe= {setFilesSharedWithMe} />
         {loggedIn && <ListManager data={ {myFiles, sharedFiles} } title={"My Files"} />}
       </div>
     </TelegramMiniAppProvider>
