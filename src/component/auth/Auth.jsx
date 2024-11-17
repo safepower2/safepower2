@@ -48,10 +48,9 @@ export async function generateUserSeed() {
     method: 'eth_private_key',
   });
   return getSHA256Hash(privateKey);
-  return getSHA256Hash(privateKey);
 }
 
-function Auth({ loggedIn, setLoggedIn }) {
+function Auth({ loggedIn, setLoggedIn, myFiles, setMyFilesData, sharedFiles, setFilesSharedWithMe }) {
   const [provider, setProvider] = useState(null);
   const [accAddress, setAccAddress] = useState('');
 
@@ -138,7 +137,9 @@ function Auth({ loggedIn, setLoggedIn }) {
   return (
     <div className="header-container">
       {loggedIn ? loggedInView : unloggedInView}
-      {loggedIn && <ChooseFile account={accAddress} />}
+      {loggedIn && <ChooseFile account={accAddress} 
+          myFiles={myFiles} setMyFilesData= {setMyFilesData}
+          sharedFiles={sharedFiles} setFilesSharedWithMe= {setFilesSharedWithMe} />}
     </div>
   );
 }

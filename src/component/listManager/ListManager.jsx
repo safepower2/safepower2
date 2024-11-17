@@ -14,7 +14,7 @@ export default function ListManager({data: { myFiles, sharedFiles }}) {
         <div className="listmanager-list-item" key={index}>
           <div>{item.name}</div>
           <div>
-            <span onClick={() => {}}>
+            <span onClick={() => {alert('Sorry! Not implemented yet. Please stay tuned for the work after EthGlobal')}}>
               <img src={downloadIcon} width={22} alt="Download" />
             </span>
           </div>
