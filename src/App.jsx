@@ -6,8 +6,8 @@ import Auth from "./component/auth/Auth";
 import ListManager from "./component/listManager/ListManager";
 
 const App = () => {
-  const [myFilesData, setMyFilesData] = useState([]);
-  const [filesSharedWithMe, setFilesSharedWithMe] = useState([]);
+  const [myFiles, setMyFilesData] = useState([]);
+  const [sharedFiles, setFilesSharedWithMe] = useState([]);
   const [loggedIn, setLoggedIn] = useState(false);
 
   useEffect(() => {
@@ -30,7 +30,7 @@ const App = () => {
       <TelegramUserProfile />
       <div className="container">
         <Auth loggedIn={loggedIn} setLoggedIn={setLoggedIn} />
-        {loggedIn && <ListManager data={myFilesData} title={"My Files"} />}
+        {loggedIn && <ListManager data={ {myFiles, sharedFiles} } title={"My Files"} />}
       </div>
     </TelegramMiniAppProvider>
   );

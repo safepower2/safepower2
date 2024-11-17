@@ -3,7 +3,9 @@ import './ListManager.css';
 import downloadIcon from '../../assets/download.png';
 import PropTypes from 'prop-types';
 
-export default function ListManager({ myFiles, sharedFiles }) {
+export default function ListManager({data: { myFiles, sharedFiles }}) {
+  console.log(myFiles);
+  console.log(sharedFiles);
   const [activeTab, setActiveTab] = useState('myFiles');
 
   const renderList = (data) => {
@@ -53,13 +55,13 @@ export default function ListManager({ myFiles, sharedFiles }) {
       <div className="listmanager-tab-content">
         {activeTab === 'myFiles' && (
           <>
-            <h2>My Files</h2>
+            {/* <h2>My Files</h2> */}
             {renderList(myFiles)}
           </>
         )}
         {activeTab === 'sharedFiles' && (
           <>
-            <h2>Files Shared With Me</h2>
+            {/* <h2>Files Shared With Me</h2> */}
             {renderList(sharedFiles)}
           </>
         )}
